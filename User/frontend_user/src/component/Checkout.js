@@ -9,7 +9,11 @@ const cookies = new Cookies();
 
 class Checkout extends Component {
   state = {
-    datacheck: []
+    datacheck: [],
+    namadepan: '',
+    email: '',
+    handphone: '',
+    alamat: ''
   }
 
   componentWillMount = () => {
@@ -21,6 +25,21 @@ class Checkout extends Component {
     });
     console.log(this.state.datacheck)
   }
+  componentDidMount =() => {
+    var id_user = cookies.get("login");
+    axios.get('http://localhost:8002/grabdatauser/'+id_user).then(
+      (hasilAmbil) => {
+        console.log(hasilAmbil.data);
+        this.setState({
+            id: hasilAmbil.data[0].id,
+            namadepan: hasilAmbil.data[0].namadepan,
+            email: hasilAmbil.data[0].email,
+            handphone: hasilAmbil.data[0].handphone,
+            alamat: hasilAmbil.data[0].alamat
+        });
+        
+    });
+}
   render() {
 
     if (cookies.get('login') === undefined)
@@ -73,9 +92,9 @@ class Checkout extends Component {
                 <div>
                   <ul className="nav nav-tabs">
                     <li className="nav-item">
-                      <a className="nav-link active show" data-toggle="tab" href="#home">Default</a>
+                      <a className="nav-link" data-toggle="tab" href="#home">Default</a>
                     </li>
-                    <li className="nav-item">
+                    <li className="nav-item active show">
                       <a className="nav-link" data-toggle="tab" href="#profile">Edit</a>
                     </li>
                   </ul>
@@ -84,52 +103,44 @@ class Checkout extends Component {
                       <div className="form-row">
                         <div className="form-group col-md-12">
                           <label htmlFor="namadepan">Nama Depan</label>
-                          <input type="text" className="form-control" defaultValue="Okki" disabled/>
-                        </div>
-                        <div className="form-group col-md-12">
-                          <label htmlFor="namabelakang">Nama Belakang</label>
-                          <input type="text" className="form-control" id="namabelakang" value="Satria" disabled/>
+                          <input type="text" className="form-control" defaultValue={this.state.namadepan} disabled/>
                         </div>
                       </div>
                       <div className="form-row">
                         <div className="form-group col-md-12">
                           <label htmlFor="inputEmail4">Email</label>
-                          <input type="email" className="form-control" id="inputEmail4" value="@gmail" disabled/>
+                          <input type="email" className="form-control" id="inputEmail4" defaultValue={this.state.email} disabled/>
                         </div>
                       </div>
                       <div className="form-group">
                         <label htmlFor="handphone">No. Handphone</label>
-                        <input type="text" className="form-control" id="handphone" value={+6280000000000} disabled/>
+                        <input type="text" className="form-control" id="handphone" defaultValue={this.state.handphone} disabled/>
                       </div>
                       <div className="form-group">
                         <label htmlFor="inputAddress">Alamat</label>
-                        <input type="text" className="form-control" id="inputAddress" value="Sudirman, Setia Budi" disabled/>
+                        <input type="text" className="form-control" id="inputAddress" defaultValue={this.state.alamat} disabled/>
                       </div>
                     </div>
                     <div className="tab-pane fade active show" id="profile">
                       <div className="form-row">
                         <div className="form-group col-md-12">
                           <label htmlFor="namadepan">Nama Depan</label>
-                          <input type="text" className="form-control" id="namadepan" placeholder="Okki" />
-                        </div>
-                        <div className="form-group col-md-12">
-                          <label htmlFor="namabelakang">Nama Belakang</label>
-                          <input type="text" className="form-control" id="namabelakang" placeholder="Satria" />
+                          <input type="text" className="form-control" defaultValue={this.state.namadepan} />
                         </div>
                       </div>
                       <div className="form-row">
                         <div className="form-group col-md-12">
                           <label htmlFor="inputEmail4">Email</label>
-                          <input type="email" className="form-control" id="inputEmail4" placeholder="@gmail" />
+                          <input type="email" className="form-control" defaultValue={this.state.email} />
                         </div>
                       </div>
                       <div className="form-group">
                         <label htmlFor="handphone">No. Handphone</label>
-                        <input type="text" className="form-control" id="handphone" placeholder={+6280000000000} />
+                        <input type="text" className="form-control" defaultValue={this.state.handphone} />
                       </div>
                       <div className="form-group">
                         <label htmlFor="inputAddress">Alamat</label>
-                        <input type="text" className="form-control" id="inputAddress" placeholder="Sudirman, Setia Budi" />
+                        <input type="text" className="form-control" defaultValue={this.state.alamat} />
                       </div>
                     </div>    
                   </div>
@@ -157,7 +168,7 @@ class Checkout extends Component {
                     </tr>
                   </tbody>
                 </table>
-                <button type="button" className="btn btn-success">CHECKOUT</button>
+                <Link to="/Invoice"><button type="button" className="btn btn-success">CHECKOUT</button></Link>
               </div>           
             </div>
           </div>

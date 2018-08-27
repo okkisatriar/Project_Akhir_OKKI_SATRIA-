@@ -163,7 +163,7 @@ dbs.query(sql, (err,result)=>
 })
 
 app.get('/datacart', (req, res) => {
-    var sql = ` SELECT table_cart.id, table_addproduk.posting,  table_addproduk.alamat, table_addproduk.harga,table_addproduk.foto_produk
+    var sql = ` SELECT table_cart.id, table_cart.id_produk,table_addproduk.posting,  table_addproduk.alamat, table_addproduk.harga,table_addproduk.foto_produk
                 FROM table_cart
                 JOIN table_addproduk ON table_cart.id_produk=table_addproduk.id`;
     dbs.query(sql, (err, result) => {
@@ -175,9 +175,7 @@ app.get('/datacart', (req, res) => {
     });
 });
 app.get('/datacheck', (req, res) => {
-    var sql = ` SELECT table_cart.id, table_addproduk.posting, table_addproduk.harga,table_addproduk.foto_produk
-                FROM table_cart
-                JOIN table_addproduk ON table_cart.id_produk=table_addproduk.id`;
+    var sql = `SELECT table_cart.id, table_cart.id_produk, table_addproduk.posting, table_addproduk.harga,table_addproduk.foto_produk FROM table_cart JOIN table_addproduk ON table_cart.id_produk=table_addproduk.id`;
     dbs.query(sql, (err, result) => {
         if(err){
             throw err;
@@ -187,3 +185,36 @@ app.get('/datacheck', (req, res) => {
     });
 });
 
+app.post('/hapuscart', (req, res) =>
+{
+    var idcart=req.body.id_produk;
+    // console.log(idcart);
+    var hapuscart = `DELETE FROM table_cart WHERE id_produk="${idcart}"`;
+    dbs.query(hapuscart, (err,result) =>
+    {
+        if (err)
+        {
+            throw err;
+        }
+        else
+        {
+            res.send('berhasil')
+            // console.log("Ada Cart yg Terhapus")
+        }
+    })
+})
+
+app.get('/grabdatauser/:id', (req, res) => {
+    /** Menyiapkan query untuk ke MySQL */
+    var grabdatauser = `SELECT * FROM master_user_admin WHERE id = ${req.params.id}`;
+    /** Mengeksekusi query dengan syntax nodeJS */
+    dbs.query(grabdatauser, (err, hasilquery) => {
+        if(err){
+            /** Mengeluarkan pesan error apabila terjadi kesalahan */
+            throw err;
+        } else {
+            /** Menyiapkan hasil query untuk siap dikirim */
+            res.send(hasilquery);
+        }
+    })
+});

@@ -70,7 +70,7 @@ class Product_detail extends Component {
         if(cookies.get('login')<"1" || cookies.get('login')=== undefined)
         {
             {this.state.redirect= true}
-            this.props.dispatch({type:'Login', kirim: "gagal bro palsu lu" })
+            // this.props.dispatch({type:'Login', kirim: "gagal bro palsu lu" })
         }
         if(this.state.nextpage)
         {
@@ -172,8 +172,6 @@ class Product_detail extends Component {
                 <div className="card-body">
                   <h5 className="card-title">BUY NOW</h5>
                   <button onClick={()=>this.buy(this.state.id, this.state.harga)} className="btn btn-success">ADD TO CART</button>
-                  <button className="btn btn-primary"><span className="fa fa-heart" /></button>
-                 
                 </div>
               </div>
             </div>
